@@ -6,16 +6,20 @@ async function getch(url){
 
 async function uj_info(){
     console.log("megnyomódtam");
-    let data = await getch("https://api.artic.edu/api/v1/artworks");
+
+    let random_oldal = veletlen_szam(1, 10000);
+    let data = await getch(`https://api.artic.edu/api/v1/artworks?page=${random_oldal}`);
+    console.log(random_oldal);
     console.log(data);
-    console.log("adat megérkezett és már ki is írtam");
+    
+    let i = veletlen_szam(0, 11);
+    console.log(i);
 
-    // cim.innerHTML = data['object'];
-    cim.innerHTML = data.data[0].title;
+    cim.innerHTML = data.data[i].title;
 
-    muvesz.innerHTML = data.data[0].artist_display;
-    info.innerHTML = data.data[0].place_of_origin;
-    kep.src = data.data[0].image;
+    muvesz.innerHTML = data.data[i].artist_display;
+    info.innerHTML = data.data[i].place_of_origin;
+    kep.src = `${data.config.iiif_url}/${data.data[i].image_id}/full/max/0/default.jpg`;
     
 }
 
@@ -25,6 +29,10 @@ const kep = document.getElementById("kep");
 const info = document.getElementById("info");
 
 gomb.addEventListener("click", uj_info);
+
+function veletlen_szam(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
 
 // console.log("a betöltéskor lekérdezem a föld adatait");
 // uj_info(); // itt most nincs await!!! nem is lehetne, mert nem async függvényben vagyunk...
